@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+ 
+<HTML>
+
+<HEAD>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<TITLE>Phase I Municipal Stormwater Permit Monitoring for S8.D, Stormwater Monitoring</TITLE>
+
+<meta name="OWNER" content="nkal461">
+<meta name="PROGRAM" content="WQ"> 
+<meta name="SECTION" content="PMO">
+<meta name="DATE CREATED" content="unknown"> 
+<meta name="LAST UPDATE" content="03/11/2015">
+<meta name="NEXT REVIEW" content="6"> 
+<meta name="MODIFIED BY" content="nkal461">
+<meta name="COMMENTS"content="">
+
+<link rel="stylesheet" href="/css/ecology4c.css" type="text/css">
+
+<style>
+
+#graphContainer {
+    height: 375px;
+    width:  750px;
+}
+
+
+#seasonGraph {
+    height: 350px;
+    width:  300px;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+
+</style>
+
+</HEAD>
+
+<BODY>
+<!--#include virtual="/ssi/banner3.inc" -->
+
+
+<p class="breadcrumb"><a href="/ecyhome.html">Ecology home</a> &gt; 
+    <a href="../../wqhome.html">Water Quality</a> &gt; 
+    <a href="/programs/wq/stormwater/index.html">Stormwater</a> &gt;
+    <a href="/programs/wq/stormwater/municipal/strmH2Omonitoring.html">Stormwater Monitoring Resources</a> &gt; 
+    Phase I Municipal Stormwater Permit Monitoring for S8.D, Stormwater Monitoring and Information</p>
+
+<h1>Phase I Municipal Stormwater Permit Monitoring: Stormwater 
+    Monitoring (S8.D)</h1>
+
+
+<table>
+<tr>
+<td valign="baseline" width="750">
+
+<h2>2007-2012 Results </h2>
+
+<p>See the <a target="_blank" href="https://fortress.wa.gov/ecy/publications/SummaryPages/1503001.html">
+    full report</a> for detailed analyses and conclusions.  The <a href="/programs/wq/stormwater/municipal/phaseIpermit/s8d-data/ms4PermitS8dData.zip">
+    dataset</a> is also available.</p>
+
+<h3>Program Details</h3>
+
+<p>Special Condition S8.D of the 2007-2012 Phase I Municipal Stormwater Permit required permittees to
+    collect and analyze data to evaluate pollutant loadings of 
+    stormwater discharged from different land uses: high density (HD) residential, low density (LD) residential,
+    commercial, and industrial.</p>
+
+<p>To meet the S8.D requirement, Phase I Permittees collected 
+    water quality and flow data, sediment data, and toxicity information from 
+    stormwater discharges during storm events. </p>
+    
+<p>The intent of the outfall monitoring program was to gather baseline stormwater discharge quality data
+    and to determine whether stormwater management programs reduced pollutants 
+    discharged to Washington's Waters and thus protected water quality. </p>
+    
+<p>Some permittees have either elected to, or been required to, continue stormwater discharge monitoring
+    under the 2013-2018 permit; specifically, Clark County and the City of Tacoma.</p>
+
+<h3>Sample Concentrations by Parameter and Land Use</h3>
+    
+<select id="parameters" disabled></select>
+<br>
+
+<svg id="landuseGraph" width="750" height="350">
+    <text id="loadText" x="225" y="175" fill="red">Loading libraries.  Please wait...</text>
+</svg>
+
+<p>Each dot represents a single storm event (for water results) or a yearly composite sample (for sediment results).</p>
+
+<p>Gray dots represent <a target="_blank" href="http://www.practicalstats.com/training/nada/">non-detect</a> samples.
+
+
+
+
+<p><b>Parameters monitored: </b></p>
+
+<ul>
+    <li> Conventional Parameters </li>
+    <li> Organics </li>
+    <li> Metals </li>
+    <li> Pesticides </li>
+    <li> Nutrients </li>
+</ul>
+
+<p>For detailed parameter lists, see S8.D of the 2012-2013
+    <a href="http://www.ecy.wa.gov/programs/wq/stormwater/municipal/phaseIpermit/phipermit.html">
+    Phase I permit</a>. </p>
+    
+<p><i>Reporting and Data Sharing</i><br>
+    Phase I S8.D outfall data gathered under the municipal stormwater permit are submitted to
+    Ecology’s Environmental Information Management Database (EIM). To access 
+    data reports or obtain more information about Ecology’s EIM database go to:
+    <a href="http://www.ecy.wa.gov/science/data.html">
+    www.ecy.wa.gov/science/data.html</a></p>
+    
+<p><i>Quality Assurance Project Plans</i> <br>
+    Phase I Permittees were required to develop Quality Assurance Project Plans (QAPPs) 
+    for review and approval by Ecology. The QAPPs below contain detailed information 
+    about each Permittee’s S8.D monitoring program from 2007-2013:</p>
+    
+<ul>
+    <li><a href="qapps/KingCountyQAPPS8D.pdf">King County’s QAPP for S8.</a></li>
+    <li><a href="qapps/SnohomishCountyQAPPS8D.pdf">Snohomish County’s QAPP for S8.D</a></li>
+    <li><a target="_blank" href="qapps/RevisedQAPPS8DMarch312011.pdf">Clark County’s QAPP for S8.D</a></li>
+    <li><a href="qapps/PierceCountyQAPPS8D.pdf">Pierce County’s QAPP for S8.D</a></li>
+    <li>City of Tacoma’s QAPP for <a href="qapps/CityofTacomaQAPPS8.pdf">S8</a> and
+    <a href="qapps/CityofTacomaQAPPS8D.pdf">S8.D</a> </li>
+    <li><a href="qapps/CityofSeattleQAPPS8D.pdf">City of Seattle’s QAPP for S8.D</a></li>
+    <li><a href="qapps/PortofTacomaQAPPS8D.pdf">Port of Tacoma’s QAPP for S8.D</a></li>
+    <li><a href="qapps/PortofSeattleQAPPS8D.pdf">Port of Seattle’s QAPP for S8.D</a><br>&nbsp;</li>
+</ul>
+
+<p>&nbsp;</p>
+
+</td>
+
+<td width="25">
+&nbsp;
+</td>
+
+<td class="right_col" width="150" valign="top">
+    <p><a href="https://fortress.wa.gov/ecy/publications/summarypages/1210050.html">Stormwater Monitoring Report 
+        Guidance-Phase I </a> </p> <br>
+    <p><a href="/programs/eap/quality.html">EAP Quality Assurance</a></p><br>
+    <p><a href="/programs/wq/stormwater/municipal/phaseIpermit/phipermit.html">
+        Phase I Permit</a></p><br>
+    <p><a target="_blank" href="https://fortress.wa.gov/ecy/publications/summarypages/1010075.html">QAPP Guidance for S8.D</a></p><br>
+    <p><a href="s8eeffectivenessmonitoring.html">Phase I S8.E Monitoring</a></p><br>
+    <p><a href="s8fevaluationmonitoring.html">Phase I S8.F Monitoring</a></p><br>
+
+</td>
+</tr>
+</table>
+
+<!-- Load up PapaParse (csv reading), LoDash (data/array manipulation), and D3 (graphing). -->
+<!--<script src="/programs/wq/stormwater/municipal/js/papaparse.min.js" type="text/javascript"></script>-->
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="js/papaparse.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js" type="text/javascript"></script>
+
+<!-- Javascript to control the graphing -->
+
+<script type="text/javascript">
+
+//Papa.SCRIPT_PATH = "/programs/wq/stormwater/municipal/js/papaparse.min.js";
+Papa.SCRIPT_PATH = "js/papaparse.min.js";
+
+$("#loadText").text("Libraries loaded.  Importing data...");
+
+// Global vars, accessible from the console
+
+var theData      = [];
+var theErrors    = [];
+var selectedData = [];
+var parameters   = [];
+
+// Graph setup - landuse graph
+var margin1 = {top: 20, right: 20, bottom: 30, left: 80},
+    width1  = 750 - margin1.left - margin1.right,
+    height1 = 350 - margin1.top  - margin1.bottom;
+
+// These domain values DO NOT match the .Type data in the CSV.
+//  Make sure they match the values in the selectedData.forEach function below.
+var x1 = d3.scale.ordinal()
+    .rangePoints([25, width1 - 25], 1)
+    //.domain(["IND", "COM", "HDR", "LDR"]);
+    .domain(["Industrial", "Commercial", "HD Residential", "LD Residential"]);
+
+var y1 = d3.scale.linear()
+    .range([height1, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis1 = d3.svg.axis()
+    .scale(x1)
+    .orient("bottom");
+
+var yAxis1 = d3.svg.axis()
+    .scale(y1)
+    .orient("left");
+    
+var svg1 = d3.select("#landuseGraph")
+    .attr("width", width1 + margin1.left + margin1.right)
+    .attr("height", height1 + margin1.top + margin1.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+svg1.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height1 + ")");
+    
+svg1.append("g")
+    .attr("class", "y axis")
+  .append("text")
+    .attr("class", "label")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end");
+
+    
+    
+function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
+    
+// Load up the data, populate global vars, activate the input
+
+var i = 1;
+
+function setParameters() {
+    // Update the select box with a list of parameters
+    parameters = _(theData)
+                        .countBy('Parameter')
+                        .keys()
+                        .valueOf()
+                        .sort()
+                        .filter(Boolean);
+    var paramList = [];
+
+    $.each(parameters, function(key, value) {
+        paramList.push('<option value="' + key + '">' + value + '</option>');
+    });
+
+    $("#parameters").html(paramList.join(''));
+    $("#parameters").prop('disabled', false);
+    $("#loadText").text("Data loaded.  Creating graph (3 of 3)...");
+    $("#parameters").change();
+}
+
+// Interactive functions
+
+$(document).ready(function() {
+    
+    // Set to 1 MB to minimize potential issues
+    Papa.RemoteChunkSize = 1000000
+    
+    //Papa.parse("/programs/wq/stormwater/municipal/phaseIpermit/s8d-web-data.csv", {
+    Papa.parse("phaseIpermit/s8d-web-data.csv", {
+        
+        download:       true,
+        header:         true,
+        dynamicTyping:  true,
+        skipEmptyLines: true,
+        //worker:         true,
+
+        
+        chunk: function(results) {
+            
+            //console.log(filename);
+            
+            // Append the new data to the existing arrays
+            theData = theData.concat(results.data);
+
+            $("#loadText").text("Loaded " + i + " of 5...");
+            i++;
+        },
+        
+        complete: function() {
+            setParameters();
+        }
+    });
+    
+    $("#parameters").change(function() {
+        
+        var parameter = $("#parameters option:selected").text();
+        
+        selectedData = _.filter(theData, {'Parameter': parameter});
+        selectedData = _.filter(selectedData, function(d) {
+            return (d.nonDetect_Flag == "TRUE" || d.nonDetect_Flag == "FALSE")
+        });
+        
+        selectedData.forEach(function(d) {
+        
+                        if (d.Type == "IND") {
+                            d.longType = "Industrial";
+                        } else if (d.Type == "COM") {
+                            d.longType = "Commercial";
+                        } else if (d.Type == "HDR") {
+                            d.longType = "HD Residential";
+                        } else if (d.Type == "LDR") {
+                            d.longType = "LD Residential";
+                        };
+        });
+        
+        var naData      = _.filter(selectedData, {"nonDetect_Flag": "TRUE"});
+        var detectData  = _.filter(selectedData, {"nonDetect_Flag": "FALSE"});
+        
+        // **************
+        // Graph the data
+        // **************
+        
+        $("#loadText").remove();
+        
+        // Update the axis extents and axis labels
+        y1.domain(d3.extent(selectedData, function(d) { return d.new_Result_Value; })).nice();
+        svg1.select(".y.axis").call(yAxis1);
+        
+        svg1.select(".y.axis text")
+            .text("Sample Value (" + selectedData[0].new_Result_Units + ")");
+        
+        svg1.select(".x.axis").call(xAxis1);
+        
+        
+        // Data Join (for most cases, data will always be all new)
+        //  Separately select NA and Detect data, to render z-order correctly
+        var detectPoints = svg1.selectAll(".detectPoint")
+            .data(detectData, function(d) { return d.Access_ID });
+        var naPoints = svg1.selectAll(".naPoint")
+            .data(naData, function(d) { return d.Access_ID });
+
+            
+        // Update NA
+        naPoints.attr("class", "update")
+          .transition()
+            .duration(750)
+            .attr("cy", function(d, i) { return y1(d.new_Result_Value); });
+                    
+        // Update Detect
+        detectPoints.attr("class", "update")
+          .transition()
+            .duration(750)
+            .attr("cy", function(d, i) { return y1(d.new_Result_Value); });
+        
+        
+        // Enter NA
+        naPoints.enter().append("circle")
+            .attr("class", "naPoint")
+            .attr("r", 3)
+            .attr("cx", function(d) { return x1(d.longType) + jitter(); })
+            .attr("cy", height1)
+            .style("fill", function(d) { return "#FFFFFF"; })
+          .transition()
+            .duration(750)
+            .style("fill", function(d) { return "#CCCCCC"; })
+            .attr("cy", function(d) { return y1(d.new_Result_Value); });
+            
+                
+        // Enter Detect
+        detectPoints.enter().append("circle")
+            .attr("class", "detectPoint")
+            .attr("r", 3)
+            .attr("cx", function(d) { return x1(d.longType) + jitter(); })
+            .attr("cy", height1)
+            .style("fill", function(d) { return "#FFFFFF"; })
+          .transition()
+            .duration(750)
+            .style("fill", function(d) { return color(d.Type); })
+            .attr("cy", function(d) { return y1(d.new_Result_Value); });
+        
+
+            
+        // Exit NA
+        naPoints.exit()
+            .attr("class", "exit")
+          .transition()
+            .style("fill", function(d) { return "#FFFFFF"; })
+            .duration(750)
+            .attr("cy", 0)
+            .remove();
+                
+        // Exit Detect
+        detectPoints.exit()
+            .attr("class", "exit")
+          .transition()
+            .style("fill", function(d) { return "#FFFFFF"; })
+            .duration(750)
+            .attr("cy", 0)
+            .remove();
+    });
+});
+
+</script>
+
+<!-- footer -->
+<!--#include virtual="/ssi/footer3.inc" -->
+</BODY>
+</HTML>
