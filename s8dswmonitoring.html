@@ -1,19 +1,3 @@
-Skip to content
- This repository
-Explore
-Gist
-Blog
-Help
-@IanWesley IanWesley
- 
- Watch 1
-  Star 0
-  Fork 1
-ethankale/ecy-wa-s8d-webpage
- branch: master  ecy-wa-s8d-webpage/s8dswmonitoring.html
-@ethankaleethankale a day ago Some additional info in the readme file. Minor tweaks to the .html fi…
-1 contributor
-RawBlameHistory     407 lines (301 sloc)  14.067 kb
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
  "http://www.w3.org/TR/html4/loose.dtd">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -37,19 +21,25 @@ RawBlameHistory     407 lines (301 sloc)  14.067 kb
 <link rel="stylesheet" href="/css/ecology4c.css" type="text/css">
 
 <style>
+
 #graphContainer {
     height: 375px;
     width:  750px;
 }
+
+
 #seasonGraph {
     height: 350px;
     width:  300px;
 }
+
 .axis path, .axis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
+
+
 </style>
 
 </HEAD>
@@ -182,30 +172,40 @@ RawBlameHistory     407 lines (301 sloc)  14.067 kb
 <!-- Javascript to control the graphing -->
 
 <script type="text/javascript">
+
 //Papa.SCRIPT_PATH = "/programs/wq/stormwater/municipal/js/papaparse.min.js";
 Papa.SCRIPT_PATH = "js/papaparse.min.js";
+
 $("#loadText").text("Libraries loaded.  Importing data...");
+
 // Global vars, accessible from the console
+
 var theData      = [];
 var theErrors    = [];
 var selectedData = [];
 var parameters   = [];
+
 // Graph setup - landuse graph
 var margin1 = {top: 20, right: 20, bottom: 30, left: 80},
     width1  = 750 - margin1.left - margin1.right,
     height1 = 350 - margin1.top  - margin1.bottom;
+
 // These domain values DO NOT match the .Type data in the CSV.
 //  Make sure they match the values in the selectedData.forEach function below.
 var x1 = d3.scale.ordinal()
     .rangePoints([25, width1 - 25], 1)
     //.domain(["IND", "COM", "HDR", "LDR"]);
     .domain(["Industrial", "Commercial", "HD Residential", "LD Residential"]);
+
 var y1 = d3.scale.linear()
     .range([height1, 0]);
+
 var color = d3.scale.category10();
+
 var xAxis1 = d3.svg.axis()
     .scale(x1)
     .orient("bottom");
+
 var yAxis1 = d3.svg.axis()
     .scale(y1)
     .orient("left");
@@ -215,6 +215,7 @@ var svg1 = d3.select("#landuseGraph")
     .attr("height", height1 + margin1.top + margin1.bottom)
   .append("g")
     .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
 svg1.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height1 + ")");
@@ -227,12 +228,15 @@ svg1.append("g")
     .attr("y", 6)
     .attr("dy", ".71em")
     .style("text-anchor", "end");
+
     
     
 function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
     
 // Load up the data, populate global vars, activate the input
+
 var i = 1;
+
 function setParameters() {
     // Update the select box with a list of parameters
     parameters = _(theData)
@@ -242,49 +246,36 @@ function setParameters() {
                         .sort()
                         .filter(Boolean);
     var paramList = [];
+
     $.each(parameters, function(key, value) {
         paramList.push('<option value="' + key + '">' + value + '</option>');
     });
+
     $("#parameters").html(paramList.join(''));
     $("#parameters").prop('disabled', false);
     $("#loadText").text("Data loaded.  Creating graph (3 of 3)...");
     $("#parameters").change();
 }
+
 // Interactive functions
+
 $(document).ready(function() {
     
-    // Set to 1 MB to minimize potential issues
-    Papa.RemoteChunkSize = 1000000
-    
-    //Papa.parse("/programs/wq/stormwater/municipal/phaseIpermit/s8d-web-data.csv", {
-    Papa.parse("https://data.wa.gov/api/views/d958-q2ci/rows.csv", {
-        
-        download:       true,
-        header:         false,
-        dynamicTyping:  true,
-        skipEmptyLines: true,
-        //worker:         true,
-        
-       // chunk: function(results) {
-            
-            //console.log(filename);
-            
-            // Append the new data to the existing arrays
-            //theData = theData.concat(results.data);
-            //$("#loadText").text("Loaded " + i + " of 5...");
-            //i++;
-        //},
-        
-        complete: function() {
-            setParameters();
-        }
-    });
+    // API Call
+var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json"
+
+// Get json from the SODA API
+
+$.getJSON(sodaUrl, function(rawData) {
+ theData=rawData;
+ setParameters()
+});
     
     $("#parameters").change(function() {
         
         var parameter = $("#parameters option:selected").text();
         
-        selectedData = _.filter(theData, {'Parameter': parameter});
+        selectedData = _.filter(theData, {'parameter': parameter});
         selectedData = _.filter(selectedData, function(d) {
             return (d.nonDetect_Flag == "TRUE" || d.nonDetect_Flag == "FALSE")
         });
@@ -302,8 +293,8 @@ $(document).ready(function() {
                         };
         });
         
-        var naData      = _.filter(selectedData, {"nonDetect_Flag": "TRUE"});
-        var detectData  = _.filter(selectedData, {"nonDetect_Flag": "FALSE"});
+        var naData      = _.filter(selectedData, {"nondetect_flag": "TRUE"});
+        var detectData  = _.filter(selectedData, {"nondetect_flag": "FALSE"});
         
         // **************
         // Graph the data
@@ -316,7 +307,7 @@ $(document).ready(function() {
         svg1.select(".y.axis").call(yAxis1);
         
         svg1.select(".y.axis text")
-            .text("Sample Value (" + selectedData[0].new_Result_Units + ")");
+            .text("Sample Value (" + selectedData[0].new_result_units + ")");
         
         svg1.select(".x.axis").call(xAxis1);
         
@@ -327,6 +318,7 @@ $(document).ready(function() {
             .data(detectData, function(d) { return d.Access_ID });
         var naPoints = svg1.selectAll(".naPoint")
             .data(naData, function(d) { return d.Access_ID });
+
             
         // Update NA
         naPoints.attr("class", "update")
@@ -366,6 +358,7 @@ $(document).ready(function() {
             .style("fill", function(d) { return color(d.Type); })
             .attr("cy", function(d) { return y1(d.new_Result_Value); });
         
+
             
         // Exit NA
         naPoints.exit()
@@ -386,11 +379,10 @@ $(document).ready(function() {
             .remove();
     });
 });
+
 </script>
 
 <!-- footer -->
 <!--#include virtual="/ssi/footer3.inc" -->
 </BODY>
 </HTML>
-Status API Training Shop Blog About
-© 2015 GitHub, Inc. Terms Privacy Security Contact
