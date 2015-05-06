@@ -242,7 +242,7 @@ function setParameters() {
  theData = $.getValues(sodaUrl)
  
    for(var i = 0; i < theData.length; i++){
-      theData[i].parameter = theData[i].parameter + " - " + theData[i].sample_matrix + " - " + theData[i].fraction_analyzed;
+      theData[i].parameter = theData[i].parameter + " - " + theData[i].sample_matrix;
    }
     // Update the select box with a list of parameters
     parameters = _(theData)
