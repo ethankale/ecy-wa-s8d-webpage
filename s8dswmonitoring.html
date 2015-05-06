@@ -238,14 +238,20 @@ function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
 var i = 1;
 
 function setParameters() {
+ 
+ theData = $.getValues(sodaUrl)
+
     // Update the select box with a list of parameters
     parameters = _(theData)
-                        .countBy('Parameter')
+                        .countBy('parameter')
                         .keys()
                         .valueOf()
                         .sort()
                         .filter(Boolean);
     var paramList = [];
+
+    
+
 
     $.each(parameters, function(key, value) {
         paramList.push('<option value="' + key + '">' + value + '</option>');
@@ -259,42 +265,86 @@ function setParameters() {
 
 // Interactive functions
 
+var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?$limit=10000"
+
+    jQuery.extend
+    (
+        {
+            getValues: function(url) 
+            {
+                var result = null;
+                $.ajax(
+                    {
+                        url: url,
+                        type: 'get',
+                        dataType:'json',
+                        async: false,
+                        cache: false,
+                        success: function(data) 
+                        {
+                            result = data;
+                        }
+                    }
+                );
+               return result;
+            }
+        }
+    );
+
+
+
 $(document).ready(function() {
     
-    // API Call
-var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json"
 
-// Get json from the SODA API
+setParameters()
 
-$.getJSON(sodaUrl, function(rawData) {
- theData=rawData;
- setParameters()
-});
+
+
     
     $("#parameters").change(function() {
         
         var parameter = $("#parameters option:selected").text();
-        
-        selectedData = _.filter(theData, {'parameter': parameter});
-        selectedData = _.filter(selectedData, function(d) {
-            return (d.nonDetect_Flag == "TRUE" || d.nonDetect_Flag == "FALSE")
+
+
+        selectedData = $(theData).filter(function (i,n){return n.parameter===parameter});
+
+        //selectedData = _.filter(theData, {'parameter': parameter});
+        selectedData = $(selectedData).filter(function(i, d) {
+            return (d.nondetect_flag == "TRUE" || d.nondetect_flag == "FALSE")
         });
+ 
+        for(var i = 0; i < selectedData.length; i++){
+                     
+                       if (selectedData[i].type == "IND") {
+                           
+                            selectedData[i].longtype = "Industrial";
+                       } else if (selectedData[i].type == "COM") {
+                           selectedData[i].longtype = "Commercial";
+                       } else if (selectedData[i].type == "HDR") {
+                            selectedData[i].longtype = "HD Residential";
+                       } else if (selectedData[i].type == "LDR") {
+                           selectedData[i].longtype = "LD Residential";
+                       };
+        }
+
+        ///selectedData.forEach(function(d) {
         
-        selectedData.forEach(function(d) {
+         //               if (d.Type == "IND") {
+          //                  d.longType = "Industrial";
+            //            } else if (d.Type == "COM") {
+              //              d.longType = "Commercial";
+                //        } else if (d.Type == "HDR") {
+                  //          d.longType = "HD Residential";
+                    //    } else if (d.Type == "LDR") {
+                      //      d.longType = "LD Residential";
+                       ///};
+        //});
         
-                        if (d.Type == "IND") {
-                            d.longType = "Industrial";
-                        } else if (d.Type == "COM") {
-                            d.longType = "Commercial";
-                        } else if (d.Type == "HDR") {
-                            d.longType = "HD Residential";
-                        } else if (d.Type == "LDR") {
-                            d.longType = "LD Residential";
-                        };
-        });
+        var naData = $(selectedData).filter(function (i,n){return n.nondetect_flag==="TRUE"});
         
-        var naData      = _.filter(selectedData, {"nondetect_flag": "TRUE"});
-        var detectData  = _.filter(selectedData, {"nondetect_flag": "FALSE"});
+        var detectData = $(selectedData).filter(function (i,n){return n.nondetect_flag==="FALSE"});
+        //var naData      = _.filter(selectedData, {"nondetect_flag": "TRUE"});
+        //var detectData  = _.filter(selectedData, {"nondetect_flag": "FALSE"});
         
         // **************
         // Graph the data
@@ -303,7 +353,7 @@ $.getJSON(sodaUrl, function(rawData) {
         $("#loadText").remove();
         
         // Update the axis extents and axis labels
-        y1.domain(d3.extent(selectedData, function(d) { return d.new_Result_Value; })).nice();
+        y1.domain(d3.extent(selectedData, function(d) { return d.new_result_value; })).nice();
         svg1.select(".y.axis").call(yAxis1);
         
         svg1.select(".y.axis text")
@@ -315,48 +365,48 @@ $.getJSON(sodaUrl, function(rawData) {
         // Data Join (for most cases, data will always be all new)
         //  Separately select NA and Detect data, to render z-order correctly
         var detectPoints = svg1.selectAll(".detectPoint")
-            .data(detectData, function(d) { return d.Access_ID });
+            .data(detectData, function(d) { return d.access_id });
         var naPoints = svg1.selectAll(".naPoint")
-            .data(naData, function(d) { return d.Access_ID });
+            .data(naData, function(d) { return d.access_id });
 
             
         // Update NA
         naPoints.attr("class", "update")
           .transition()
             .duration(750)
-            .attr("cy", function(d, i) { return y1(d.new_Result_Value); });
+            .attr("cy", function(d, i) { return y1(d.new_result_value); });
                     
         // Update Detect
         detectPoints.attr("class", "update")
           .transition()
             .duration(750)
-            .attr("cy", function(d, i) { return y1(d.new_Result_Value); });
+            .attr("cy", function(d, i) { return y1(d.new_result_value); });
         
         
         // Enter NA
         naPoints.enter().append("circle")
             .attr("class", "naPoint")
             .attr("r", 3)
-            .attr("cx", function(d) { return x1(d.longType) + jitter(); })
+            .attr("cx", function(d) { return x1(d.longtype) + jitter(); })
             .attr("cy", height1)
             .style("fill", function(d) { return "#FFFFFF"; })
           .transition()
             .duration(750)
             .style("fill", function(d) { return "#CCCCCC"; })
-            .attr("cy", function(d) { return y1(d.new_Result_Value); });
+            .attr("cy", function(d) { return y1(d.new_result_value); });
             
                 
         // Enter Detect
         detectPoints.enter().append("circle")
             .attr("class", "detectPoint")
             .attr("r", 3)
-            .attr("cx", function(d) { return x1(d.longType) + jitter(); })
+            .attr("cx", function(d) { return x1(d.longtype) + jitter(); })
             .attr("cy", height1)
             .style("fill", function(d) { return "#FFFFFF"; })
           .transition()
             .duration(750)
-            .style("fill", function(d) { return color(d.Type); })
-            .attr("cy", function(d) { return y1(d.new_Result_Value); });
+            .style("fill", function(d) { return color(d.type); })
+            .attr("cy", function(d) { return y1(d.new_result_value); });
         
 
             
