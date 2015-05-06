@@ -240,7 +240,10 @@ var i = 1;
 function setParameters() {
  
  theData = $.getValues(sodaUrl)
-
+ 
+   for(var i = 0; i < theData.length; i++){
+      theData[i].parameter = theData[i].parameter + " - " + theData[i].sample_matrix + " - " + theData[i].fraction_analyzed;
+   }
     // Update the select box with a list of parameters
     parameters = _(theData)
                         .countBy('parameter')
