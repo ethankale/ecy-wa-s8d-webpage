@@ -237,9 +237,9 @@ function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
 
 var i = 1;
 
-function setParameters() {
- 
- theData = $.getValues(sodaUrl)
+function setParameters(results) {
+ theData = results
+
  
    for(var i = 0; i < theData.length; i++){
       theData[i].parameter = theData[i].parameter + " - " + theData[i].sample_matrix;
@@ -276,20 +276,19 @@ var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?$limit=10000"
             getValues: function(url) 
             {
                 var result = null;
-                $.ajax(
-                    {
-                        url: url,
-                        type: 'get',
-                        dataType:'json',
-                        async: false,
-                        cache: false,
-                        success: function(data) 
-                        {
-                            result = data;
-                        }
-                    }
-                );
-               return result;
+
+                $.ajax({
+  url: sodaUrl,
+  jsonp: "$jsonp",
+  dataType: "jsonp",
+  success: function(data) {
+                result = data;
+                setParameters(result) 
+}});
+                    
+               
+               
+               
             }
         }
     );
@@ -297,9 +296,9 @@ var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?$limit=10000"
 
 
 $(document).ready(function() {
-    
+$.getValues(sodaUrl)
 
-setParameters()
+
 
 
 
