@@ -22,17 +22,6 @@
 
 <style>
 
-#graphContainer {
-    height: 375px;
-    width:  750px;
-}
-
-
-#seasonGraph {
-    height: 350px;
-    width:  300px;
-}
-
 .axis path, .axis line {
     fill: none;
     stroke: #000;
@@ -89,6 +78,7 @@
 <h3>Sample Concentrations by Parameter and Land Use</h3>
     
 <select id="parameters" disabled></select>
+<img id="loadspinner" src="img/loadspinner.gif" alt="Loading..." height="16" width="16">
 <br>
 
 <svg id="landuseGraph" width="750" height="350">
@@ -165,8 +155,8 @@
 <!-- Load up PapaParse (csv reading), LoDash (data/array manipulation), and D3 (graphing). -->
 <!--<script src="/programs/wq/stormwater/municipal/js/papaparse.min.js" type="text/javascript"></script>-->
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
-<script src="js/papaparse.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js" type="text/javascript"></script>
+<!--<script src="js/papaparse.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js" type="text/javascript"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js" type="text/javascript"></script>
 
 <!-- Javascript to control the graphing -->
@@ -174,16 +164,16 @@
 <script type="text/javascript">
 
 //Papa.SCRIPT_PATH = "/programs/wq/stormwater/municipal/js/papaparse.min.js";
-Papa.SCRIPT_PATH = "js/papaparse.min.js";
+//Papa.SCRIPT_PATH = "js/papaparse.min.js";
 
 $("#loadText").text("Libraries loaded.  Importing data...");
 
 // Global vars, accessible from the console
 
-var theData      = [];
-var theErrors    = [];
-var selectedData = [];
+// For debugging only.
+//var theData      = [];
 var parameters   = [];
+var paramList    = [];
 
 // Graph setup - landuse graph
 var margin1 = {top: 20, right: 20, bottom: 30, left: 80},
@@ -234,119 +224,74 @@ svg1.append("g")
 function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
     
 // Load up the data, populate global vars, activate the input
-
-var i = 1;
-
-function setParameters(results) {
- theData = results
-
- 
-   for(var i = 0; i < theData.length; i++){
-      theData[i].parameter = theData[i].parameter + " - " + theData[i].sample_matrix;
-   }
-    // Update the select box with a list of parameters
-    parameters = _(theData)
-                        .countBy('parameter')
-                        .keys()
-                        .valueOf()
-                        .sort()
-                        .filter(Boolean);
-    var paramList = [];
-
-    
-
-
-    $.each(parameters, function(key, value) {
-        paramList.push('<option value="' + key + '">' + value + '</option>');
-    });
-
-    $("#parameters").html(paramList.join(''));
-    $("#parameters").prop('disabled', false);
-    $("#loadText").text("Data loaded.  Creating graph (3 of 3)...");
-    $("#parameters").change();
-}
-
 // Interactive functions
 
-var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?$limit=10000"
-
-    jQuery.extend
-    (
-        {
-            getValues: function(url) 
-            {
-                var result = null;
-
-                $.ajax({
-  url: sodaUrl,
-  jsonp: "$jsonp",
-  dataType: "jsonp",
-  success: function(data) {
-                result = data;
-                setParameters(result) 
-}});
-                    
-               
-               
-               
-            }
-        }
-    );
-
-
-
 $(document).ready(function() {
-$.getValues(sodaUrl)
+    
+    //$.getValues(sodaUrl)
+    var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?";
 
+    $.getJSON(sodaUrl, {
+        $select: "parameter,count(access_id)",
+        $group:  "parameter"
+    })
+      .done(function(data) {
+        for(var i=0; i<data.length; i++) {
+            //console.log(data[i]);
+            parameters.push(data[i].parameter);
+        };
+        
+        parameters.sort();
+        
+        $.each(parameters, function(key, value) {
+            paramList.push('<option value="' + key + '">' + value + '</option>');
+        });
 
-
-
+        $("#parameters").html(paramList.join(''));
+        $("#parameters").prop('disabled', false);
+        $("#loadText").text("Data loaded.  Creating graph (3 of 3)...");
+        $("#loadspinner").hide();
+        
+        // Trigger the first parameter load.  Possible race condition?  Seems to work.
+        $("#parameters").change()
+    });
+    
 
     
     $("#parameters").change(function() {
+      
+      $("#loadspinner").show();
+      
+      var parameter = $("#parameters option:selected").text();
+      
+      $.getJSON(sodaUrl, {
+        $where: "parameter='" + parameter + "'"
+      })
+      .done(function(selectedData) {
+        $("#loadspinner").hide();
         
-        var parameter = $("#parameters option:selected").text();
-
-
-        selectedData = $(theData).filter(function (i,n){return n.parameter===parameter});
-
-        //selectedData = _.filter(theData, {'parameter': parameter});
         selectedData = $(selectedData).filter(function(i, d) {
             return (d.nondetect_flag == "TRUE" || d.nondetect_flag == "FALSE")
         });
- 
-        for(var i = 0; i < selectedData.length; i++){
-                     
-                       if (selectedData[i].type == "IND") {
-                           
-                            selectedData[i].longtype = "Industrial";
-                       } else if (selectedData[i].type == "COM") {
-                           selectedData[i].longtype = "Commercial";
-                       } else if (selectedData[i].type == "HDR") {
-                            selectedData[i].longtype = "HD Residential";
-                       } else if (selectedData[i].type == "LDR") {
-                           selectedData[i].longtype = "LD Residential";
-                       };
-        }
-
-        ///selectedData.forEach(function(d) {
         
-         //               if (d.Type == "IND") {
-          //                  d.longType = "Industrial";
-            //            } else if (d.Type == "COM") {
-              //              d.longType = "Commercial";
-                //        } else if (d.Type == "HDR") {
-                  //          d.longType = "HD Residential";
-                    //    } else if (d.Type == "LDR") {
-                      //      d.longType = "LD Residential";
-                       ///};
-        //});
+        for (var i=0; i<selectedData.length; i++) {
+           if (selectedData[i].type == "IND") {
+                selectedData[i].longtype = "Industrial";
+           } else if (selectedData[i].type == "COM") {
+               selectedData[i].longtype = "Commercial";
+           } else if (selectedData[i].type == "HDR") {
+                selectedData[i].longtype = "HD Residential";
+           } else if (selectedData[i].type == "LDR") {
+               selectedData[i].longtype = "LD Residential";
+           };
+           selectedData[i].new_result_value = +selectedData[i].new_result_value;
+        };
+        
+        // For debugging only.
+        //theData = selectedData;
         
         var naData = $(selectedData).filter(function (i,n){return n.nondetect_flag==="TRUE"});
-        
         var detectData = $(selectedData).filter(function (i,n){return n.nondetect_flag==="FALSE"});
-        //var naData      = _.filter(selectedData, {"nondetect_flag": "TRUE"});
-        //var detectData  = _.filter(selectedData, {"nondetect_flag": "FALSE"});
         
         // **************
         // Graph the data
@@ -429,7 +374,10 @@ $.getValues(sodaUrl)
             .duration(750)
             .attr("cy", 0)
             .remove();
+        });
     });
+    
+    
 });
 
 </script>
