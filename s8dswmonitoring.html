@@ -152,19 +152,13 @@
 </tr>
 </table>
 
-<!-- Load up PapaParse (csv reading), LoDash (data/array manipulation), and D3 (graphing). -->
-<!--<script src="/programs/wq/stormwater/municipal/js/papaparse.min.js" type="text/javascript"></script>-->
+<!-- Load up D3 (graphing). -->
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
-<!--<script src="js/papaparse.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js" type="text/javascript"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js" type="text/javascript"></script>
 
 <!-- Javascript to control the graphing -->
 
 <script type="text/javascript">
-
-//Papa.SCRIPT_PATH = "/programs/wq/stormwater/municipal/js/papaparse.min.js";
-//Papa.SCRIPT_PATH = "js/papaparse.min.js";
 
 $("#loadText").text("Libraries loaded.  Importing data...");
 
@@ -184,7 +178,6 @@ var margin1 = {top: 20, right: 20, bottom: 30, left: 80},
 //  Make sure they match the values in the selectedData.forEach function below.
 var x1 = d3.scale.ordinal()
     .rangePoints([25, width1 - 25], 1)
-    //.domain(["IND", "COM", "HDR", "LDR"]);
     .domain(["Industrial", "Commercial", "HD Residential", "LD Residential"]);
 
 var y1 = d3.scale.linear()
@@ -228,16 +221,17 @@ function jitter() { return (Math.random()-0.5) * (width1 / 4) / 4 }
 
 $(document).ready(function() {
     
-    //$.getValues(sodaUrl)
-    var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?";
-
+    var sodaUrl = "https://data.wa.gov/resource/d958-q2ci.json?$jsonp=callback=?";
+    
+    $.support.cors = true;
     $.getJSON(sodaUrl, {
         $select: "parameter,count(access_id)",
         $group:  "parameter"
-    })
-      .done(function(data) {
+        }
+    )
+    .done(function(data) {
+        
         for(var i=0; i<data.length; i++) {
-            //console.log(data[i]);
             parameters.push(data[i].parameter);
         };
         
@@ -253,7 +247,7 @@ $(document).ready(function() {
         $("#loadspinner").hide();
         
         // Trigger the first parameter load.  Possible race condition?  Seems to work.
-        $("#parameters").change()
+        $("#parameters").change();
     });
     
 
@@ -268,6 +262,7 @@ $(document).ready(function() {
         $where: "parameter='" + parameter + "'"
       })
       .done(function(selectedData) {
+        
         $("#loadspinner").hide();
         
         selectedData = $(selectedData).filter(function(i, d) {
@@ -376,8 +371,6 @@ $(document).ready(function() {
             .remove();
         });
     });
-    
-    
 });
 
 </script>
